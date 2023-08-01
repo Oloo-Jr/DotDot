@@ -1,0 +1,43 @@
+{
+  "expo": {
+    "name": "R-DotDot",
+    "slug": "DotDot",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/DotDotLogo.png",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./assets/DotDotLogo.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/DotDotLogo.png",
+        "backgroundColor": "#ffffff"
+      },
+      "config": {
+        "googleMaps": {
+          "apiKey": "AIzaSyB7EFvFzgS6PDOkhHshLII90oQ6L2rsELo"
+        }
+      },
+      "package": "com.whim.DotDot",
+      "versionCode": 9,
+      "permissions": ["ACCESS_FINE_LOCATION", "ACCESS_COARSE_LOCATION"]
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "2364eef7-2a47-44a1-8e6d-c1a772b65151"
+      }
+    }
+  }
+}

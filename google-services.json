@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "898739240332",
+    "firebase_url": "https://r-dotdot-default-rtdb.firebaseio.com",
+    "project_id": "r-dotdot",
+    "storage_bucket": "r-dotdot.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:898739240332:android:af294b67c384d0e7beeaa9",
+        "android_client_info": {
+          "package_name": "com.whim.DotDot"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "898739240332-tdd0ene8p0dod7ciiusvip3tducvevib.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDPqWtKDEM8xu2B2D120zzNzsSqH2CIVl0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "898739240332-tdd0ene8p0dod7ciiusvip3tducvevib.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

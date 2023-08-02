@@ -14,7 +14,9 @@ import MapViewDirections from 'react-native-maps-directions';
 import { getDistance } from 'geolib';
 import { Icon } from 'react-native-elements';
 import { fonts } from '../../components/fonts';
-
+import MapPage from './MapScreen';
+import Geolocation from 'react-native-geolocation-service';
+//import * as Location from 'expo-location';
 
 
 
@@ -22,20 +24,101 @@ import { fonts } from '../../components/fonts';
 const DotGigScreen = ({ navigation }) => {
     
     const [allgigs, setAllgigs] = useState([]);
-    const [latlng, setLatLng] = useState({})
+    const [location, setLocation] = useState([]);
+    const [address, setAddress] = useState("")
     const [refreshing, setRefreshing] = useState(false);
-    const [agentLatitude, setAgentLatitude] = useState(0);
-    const [agentLongitude, setAgentLongitude] = useState(0);
     const [buyerLatitude, setBuyerLatitude] = useState(0);
     const [buyerLongitude, setBuyerLongitude] = useState(0);
     const [isAccepted, setIsAccepted] = useState("");
     const [closedOrder, setCloseOrder] = useState(false);
     const [amount, setAmount] = useState(0);
-    const [pendingGigs, setPendingGigs] = useState([])
-    const [deliverygigs, setDeliveryGigs] = useState([])
+    const [pendingGigs, setPendingGigs] = useState([]);
+    const [deliverygigs, setDeliveryGigs] = useState([]);
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [mpesaCode, setMpesaCode] = useState('');
+    const [agentcategory, setAgentCategory] = useState("");
+    const [agentfirstname, setAgentFirstName] = useState("");
+    const [agentlastname, setAgentLastName] = useState("");
+    const [agentvehicleregno, setAgentVehicleRegNo] = useState("");
+    const [agentvehiclemodel, setAgentVehicleModel] = useState("");
+    const [latitude, setLatitude] = useState(0);
+    const [longitude, setLongitude] = useState(0);
+    const [timeinminutes, setTimeInMinutes] = useState(0);
+    const [couriercharges, setCourierCharges] = useState(0);
+    const [totalmoney, setTotalMoney] = useState(0);
+    const [distance, setDistance] = useState(0);
+    const [phoneNumber, setPhoneNumber] = useState('');
+    const [isArrived, setIsArrived] = useState(false);
+    const [currentLocation, setCurrentLocation] = useState(null);
+    const [targetLocation, setTargetLocation] = useState(null);
 
+   
+      
+    
+    {/*  useEffect(() => {
+        (async () => {
+          let { status } = await Location.requestForegroundPermissionsAsync();
+          if (status !== 'granted') {
+            setErrorMsg('Permission to access location was denied');
+            return;
+          }
+    
+          let location = await Location.getCurrentPositionAsync({});
+          setCurrentLocation(location);
+        })();
+      }, []); */}
+
+
+      const handleGetDirection = () => {
+        navigation.navigate('DotMap', {
+          destination: {
+            latitude: buyerLatitude, // Replace with your desired destination latitude
+            longitude: buyerLongitude, // Replace with your desired destination longitude
+          },
+        });
+      };
+ 
+    const handleArrived = () => {
+        // Handle the logic for when the "Arrived" button is pressed
+        setIsArrived(true);
+      };
+
+    const lipaNaMpesa = () =>{
+        const url = "https://tinypesa.com/api/v1/express/initialize";
+
+
+        const account_no = "DotDot";
+
+        const requestBody = `amount=${totalmoney}&msisdn=${phoneNumber}&account_no=${account_no}`;
+
+        fetch(url, {
+            body: requestBody,
+            headers: {
+                Apikey: "QHEI2V9DYSV",
+                "Content-Type": "application/x-www-form-urlencoded",
+            },
+            method: "POST",
+        });
+
+    }
+
+    const getUserDetails = async () => {
+        const doc = await db.collection('DotDotUSers').doc(auth.currentUser.uid).get();
+        console.log(doc.data());
+        const category = doc.data().category;
+        const firstname = doc.data().firstname;
+        const lastname = doc.data().lastname;
+        const vehicleRegNo = doc.data().vrn;
+        const vehicleModel = doc.data().vehicleModel; 
+        
+        //store the agent data in a variable
+        setAgentCategory(category);
+        setAgentFirstName(firstname);
+        setAgentLastName(lastname);
+        setAgentVehicleRegNo(vehicleRegNo);
+        setAgentVehicleModel(vehicleModel);
+
+    }
 
     const handleButtonPress = () => {
         setIsModalVisible(true);
@@ -49,26 +132,26 @@ const DotGigScreen = ({ navigation }) => {
         setMpesaCode(value);
       };
 
+        // Calculate the distance between two sets of coordinates
+        const getDistance = (lat1, lon1, lat2, lon2) => {
+            const R = 6371; // Earth's radius in kilometers
+            const dLat = deg2rad(lat2 - lat1);
+            const dLon = deg2rad(lon2 - lon1);
+            const a =
+            Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+            Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) *
+            Math.sin(dLon / 2) * Math.sin(dLon / 2);
+            const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+            const distance = R * c; // Distance in kilometers
 
-    const getDistance = (agentLatitude, agentLongitude, buyerLatitude, buyerLongitude) => {
-        const R = 6371; // Radius of the earth in km
-        const dLat = deg2rad(buyerLatitude - agentLatitude);
-        const dLon = deg2rad(buyerLongitude - agentLongitude);
-        const a =
-          Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-          Math.cos(deg2rad(agentLatitude)) *
-            Math.cos(deg2rad(buyerLatitude)) *
-            Math.sin(dLon / 2) *
-            Math.sin(dLon / 2);
-        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-        const distance = R * c; // Distance in km
-        return distance;
-      };
-      
-      const deg2rad = (deg) => {
-        return deg * (Math.PI / 180);
-      };
-      
+            return distance;
+        };
+
+        // Convert degrees to radians
+        const deg2rad = (deg) => {
+            return deg * (Math.PI / 180);
+        };
+      {/*
     const distance = getDistance(agentLatitude, agentLongitude, buyerLatitude, buyerLongitude);
 
     console.log(distance + "Km")
@@ -120,7 +203,7 @@ const DotGigScreen = ({ navigation }) => {
 
 
 
-  {/*  useEffect(() => {
+    useEffect(() => {
         const itemRef = dbc.collection('DotDotOrders').doc();
         const unsubscribe = itemRef.onSnapshot((doc) => {
           if (doc.exists) {
@@ -131,7 +214,7 @@ const DotGigScreen = ({ navigation }) => {
           }
         });
         return () => unsubscribe();
-      }, []); */}
+      }, []); 
 
 
     //Accepting an order
@@ -151,7 +234,7 @@ const DotGigScreen = ({ navigation }) => {
         setIsAccepted(id);
         getNewOrders();
         getPendingOrders();
-      };
+      };*/}
 
       //Close an order
       const closeOrder = async(id)=> {
@@ -198,7 +281,7 @@ const getPendingOrders =async () => {
         console.log(doc.id, " => ", doc.data());
         const lat= doc.data().latitude;
         const long = doc.data().longitude;
-        const amount = doc.data().currentPrice
+        const amount = doc.data().currentPrice;
         setBuyerLatitude(lat);
         setBuyerLongitude(long); 
         setAmount(amount);
@@ -258,39 +341,39 @@ const getDeliveryOrders =async () => {
     //Get the location of the user
     useEffect(() => {
         geocode();
+        getUserDetails();
         getNewOrders();
-        getLocation();
         getPendingOrders();
-        console.log(agentLatitude, agentLongitude)
+        console.log(latitude, longitude)
     }, [])
 
-    const getLocation = async () => {
-        try {
-          const { granted } = await Location.requestBackgroundPermissionsAsync();
-          if (!granted) return;
-          const {
-            coords: { latitude, longitude },
-          } = await Location.getCurrentPositionAsync();
-          setAgentLatitude(latitude)
-          setAgentLongitude(longitude)
-          console.log(agentLatitude,agentLongitude)
-        } catch (err) {
+    useEffect(() => {
+        (async () => {
+          
+          let { status } = await Location.requestForegroundPermissionsAsync();
+          if (status !== 'granted') {
+            setErrorMsg('Permission to access location was denied');
+            return;
+          }
     
-        }
-      }
+          let location = await Location.getCurrentPositionAsync({});
+          setLatitude(location.coords.latitude);
+          setLongitude(location.coords.longitude);
+          console.log(location)
+        })();
+      }, []);
 
     //Get the Town using Latitude and Longitude
-    const geocode = async () => {
+     const geocode = async () => {
         const geocodedAddress = await Location.reverseGeocodeAsync({
-            longitude: location.coords.longitude,
-            latitude: location.coords.latitude
+            longitude: longitude,
+            latitude: latitude
         });
         setAddress(geocodedAddress[0].city);
         console.log('reverseGeocode:');
         console.log(geocodedAddress[0].city);
 
     }
-
 
     ////////DELIVERY ORDER ITEMS//////////
     const renderDeliveryOrders = ({item}) => (
@@ -303,6 +386,10 @@ const getDeliveryOrders =async () => {
             <View style={styles.orderDetails}>
               
               
+            <FlatList
+            data={item.products}
+            keyExtractor={(product, index) => index.toString()}
+            renderItem={({ item }) => (
 
                 <Card style={styles.additionsView}>
                     
@@ -310,7 +397,7 @@ const getDeliveryOrders =async () => {
                 <View style={styles.descriptionView}>   
                             <View style={styles.cartprodImage}>
                             <Image
-                              //  source={{ uri: imgUrl }}
+                              source={{ uri: item.image }}
                                 style={styles.bannerimage}
                             // resizeMode="cover" 
                             />
@@ -319,8 +406,8 @@ const getDeliveryOrders =async () => {
 
                             <View style={styles.textView}>
 
-                            <Text allowFontScaling={false} style={fonts.blackBoldBig}> dotDot</Text>
-                            <Text allowFontScaling={false} style={fonts.blackBoldBig}>KES 500</Text>
+                            <Text allowFontScaling={false} style={fonts.blackBoldBig}> {item.name}</Text>
+                            <Text allowFontScaling={false} style={fonts.blackBoldBig}>KES {item.price}</Text>
 
                             </View>
 
@@ -333,7 +420,7 @@ const getDeliveryOrders =async () => {
 
                                 <View style={styles.textView2}>
                                
-                                    <Text allowFontScaling={false} style={fonts.blackBoldSmall}>xyxyxyxyxyxyx</Text>
+                                    <Text allowFontScaling={false} style={fonts.blackBoldSmall}>{item.description}</Text>
                                 </View>
 
                                 <View style={styles.textView2}>
@@ -364,7 +451,7 @@ const getDeliveryOrders =async () => {
 
                                 <View style={styles.textView2}>
                                    
-                                <Text allowFontScaling={false} style={fonts.blackBoldBig}>5 </Text>
+                                <Text allowFontScaling={false} style={fonts.blackBoldBig}>{item.quantity} </Text>
 
                                </View>
 
@@ -381,28 +468,31 @@ const getDeliveryOrders =async () => {
                     
 
                 </Card>
+                  )}
+                  />
 
                 <View style={styles.textView}>
                     <View style={styles.textView2}>
                         <MaterialIcons name="motorcycle" size={24} color="grey" />
-                        <Text  style={fonts.blackBoldSmall}>Delivery {roundedDistance} Km</Text>
+                        <Text  style={fonts.blackBoldSmall}>Delivery  {distance.toFixed(2)}  Km</Text>
                     </View>
 
                     <View style={styles.textView2}>
                         <MaterialIcons name="timer" size={24} color="red" />
-                        <Text  style={fonts.blackBoldSmall}>{roundedDeliveryTime} minutes</Text>
+                        <Text  style={fonts.blackBoldSmall}> {timeinminutes.toFixed(0)} minutes</Text>
                     </View>
                 </View>
 
 
                 <View style={styles.textView}>
-                    <TouchableOpacity>
+                <TouchableOpacity onPress={handleGetDirection}>
                     <View style={styles.textView2}>
                         <MaterialIcons name="location-pin" size={24} color="black" />
-                        <Text style={fonts.greyLightBig}>{item.address} (View map)</Text>
+                        <Text style={fonts.greyLightBig}> (View map)</Text>
                     </View>
 
                     </TouchableOpacity>
+                   
                    
                 </View>
 
@@ -419,11 +509,11 @@ const getDeliveryOrders =async () => {
                         
 
                         <View style={styles.nameDetail}>
-                            <Text  style={fonts.blackBoldSmall}>John Doe</Text>
+                            <Text  style={fonts.blackBoldSmall}>{item.userDisplayName}</Text>
 
                             <TouchableOpacity>
                             <Card style={styles.callButton}>
-                                <Text style={fonts.whiteBoldSmall}>+254722xxxxx4</Text>
+                                <Text style={fonts.whiteBoldSmall}>{item.userPhoneNumber}</Text>
                             </Card>
                             </TouchableOpacity>
                         </View>
@@ -443,29 +533,49 @@ const getDeliveryOrders =async () => {
                 <View style={styles.textView}>
 
                     <Text  style={fonts.greeBoldSmall}>Total</Text>
-                    <Text style={fonts.greenBoldBig}>KES {totalAmount}</Text>
+                    <Text style={fonts.greenBoldBig}>KES {item.totalMoney.toFixed(2)}</Text>
                 </View>
 
 
 
                 <View style={styles.buttonView}>
         
-                    <Card style={styles.declineButton}>
-                    <TouchableOpacity onPress={handleButtonPress} >
-                        <Text style={styles.text2b}>
-                           Close Order
-                        </Text>
-                        </TouchableOpacity>
-                    </Card>
+                {isArrived ? ( 
+        
+                
+        <Card style={styles.declineButton}>
+        <TouchableOpacity onPress={handleButtonPress}>
+            <Text allowFontScaling={false} style={styles.text2b}>
+                Request Payment
+            </Text>
+            </TouchableOpacity>
+        </Card>
+          ) : (
+        <Card style={styles.acceptButton}>
+           
+            <TouchableOpacity onPress={handleArrived()}>
+                <Text allowFontScaling={false} style={styles.text2c}>
+                    Arrived
+                </Text>
+            </TouchableOpacity>
+        </Card> 
+          )}
+
                     <Modal visible={isModalVisible} onRequestClose={handleModalClose}>
-                        <View>
+                    <View style={{ backgroundColor: 'white', padding: 16 }}>
+                        <Text>Enter Your Phone Number:</Text>
                         <TextInput
-                            value={mpesaCode}
-                            onChangeText={handleTextInputChange}
-                            placeholder="Enter Mpesa Code"
+                            style={{ borderWidth: 1, borderColor: 'gray', padding: 8 }}
+                            keyboardType="phone-pad"
+                            onChangeText={(text) => setPhoneNumber(text)}
+                            value={phoneNumber}
                         />
-                        <Button title="Save" onPress={() => closeOrder(item.id)} />
+                        <Button title="Send" onPress={() => {
+                            setIsModalVisible(false);
+                            lipaNaMpesa();
+                        }} />
                         </View>
+
                     </Modal>
                     
                     
@@ -504,13 +614,18 @@ const getDeliveryOrders =async () => {
               
               
 
+            <FlatList
+            data={item.products}
+            keyExtractor={(product, index) => index.toString()}
+            renderItem={({ item }) => (
+
                 <Card style={styles.additionsView}>
                     
                 
                 <View style={styles.descriptionView}>   
                             <View style={styles.cartprodImage}>
                             <Image
-                              //  source={{ uri: imgUrl }}
+                                source={{ uri: item.image }}
                                 style={styles.bannerimage}
                             // resizeMode="cover" 
                             />
@@ -519,8 +634,8 @@ const getDeliveryOrders =async () => {
 
                             <View style={styles.textView}>
 
-                            <Text allowFontScaling={false} style={fonts.blackBoldBig}> dotDot</Text>
-                            <Text allowFontScaling={false} style={fonts.blackBoldBig}>KES 500</Text>
+                            <Text allowFontScaling={false} style={fonts.blackBoldBig}> {item.name}</Text>
+                            <Text allowFontScaling={false} style={fonts.blackBoldBig}>KES {item.price}</Text>
 
                             </View>
 
@@ -533,7 +648,7 @@ const getDeliveryOrders =async () => {
 
                                 <View style={styles.textView2}>
                                
-                                    <Text allowFontScaling={false} style={fonts.blackBoldSmall}>xyxyxyxyxyxyx</Text>
+                                    <Text allowFontScaling={false} style={fonts.blackBoldSmall}>{item.description}</Text>
                                 </View>
 
                                 <View style={styles.textView2}>
@@ -564,7 +679,7 @@ const getDeliveryOrders =async () => {
 
                                 <View style={styles.textView2}>
                                    
-                                <Text allowFontScaling={false} style={fonts.blackBoldBig}>5 </Text>
+                                <Text allowFontScaling={false} style={fonts.blackBoldBig}>{item.quantity} </Text>
 
                                </View>
 
@@ -581,25 +696,27 @@ const getDeliveryOrders =async () => {
                     
 
                 </Card>
+                  )}
+                  />
 
                 <View style={styles.textView}>
                     <View style={styles.textView2}>
                         <MaterialIcons name="motorcycle" size={24} color="grey" />
-                        <Text  style={fonts.blackBoldSmall}>Delivery {roundedDistance} Km</Text>
+                        <Text  style={fonts.blackBoldSmall}>Delivery {distance.toFixed(0)} Km</Text>
                     </View>
 
                     <View style={styles.textView2}>
                         <MaterialIcons name="timer" size={24} color="red" />
-                        <Text  style={fonts.blackBoldSmall}>{roundedDeliveryTime} minutes</Text>
+                        <Text  style={fonts.blackBoldSmall}>{timeinminutes.toFixed(0)} minutes</Text>
                     </View>
                 </View>
 
 
                 <View style={styles.textView}>
-                    <TouchableOpacity>
+                    <TouchableOpacity onPress={handleGetDirection}>
                     <View style={styles.textView2}>
                         <MaterialIcons name="location-pin" size={24} color="black" />
-                        <Text style={fonts.greyLightBig}>{item.address} (View map)</Text>
+                        <Text style={fonts.greyLightBig}> (View map)</Text>
                     </View>
 
                     </TouchableOpacity>
@@ -619,11 +736,11 @@ const getDeliveryOrders =async () => {
                         
 
                         <View style={styles.nameDetail}>
-                            <Text  style={fonts.blackBoldSmall}>John Doe</Text>
+                            <Text  style={fonts.blackBoldSmall}>{item.userDisplayName}</Text>
 
                             <TouchableOpacity>
                             <Card style={styles.callButton}>
-                                <Text style={fonts.whiteBoldSmall}>+254722xxxxx4</Text>
+                                <Text style={fonts.whiteBoldSmall}>{item.userPhoneNumber}</Text>
                             </Card>
                             </TouchableOpacity>
                         </View>
@@ -643,30 +760,18 @@ const getDeliveryOrders =async () => {
                 <View style={styles.textView}>
 
                     <Text  style={fonts.greeBoldSmall}>Total</Text>
-                    <Text style={fonts.greenBoldBig}>KES {totalAmount}</Text>
+                    <Text style={fonts.greenBoldBig}>KES {item.totalMoney.toFixed(2)} </Text>
                 </View>
 
 
 
                 <View style={styles.buttonView}>
         
-                    <Card style={styles.declineButton}>
-                    <TouchableOpacity onPress={handleButtonPress} >
-                        <Text style={styles.text2b}>
-                           Close Order
+                <Card style={styles.pendingButton}>
+                        <Text allowFontScaling={false} style={styles.text2b}>
+                            Wait for confirmation ...
                         </Text>
-                        </TouchableOpacity>
                     </Card>
-                    <Modal visible={isModalVisible} onRequestClose={handleModalClose}>
-                        <View>
-                        <TextInput
-                            value={mpesaCode}
-                            onChangeText={handleTextInputChange}
-                            placeholder="Enter Mpesa Code"
-                        />
-                        <Button title="Save" onPress={() => closeOrder(item.id)} />
-                        </View>
-                    </Modal>
                     
                     
                     
@@ -693,9 +798,50 @@ const getDeliveryOrders =async () => {
     </View>
     )
 
-    const renderOrders = ({ item }) => (
-        
+    const renderOrders = ({ item }) => {
+        const distance = getDistance(
+            latitude,
+            longitude,
+            item.latitude,
+            item.longitude
+        );
+        //claculate the courier charge price depending on distance
+        const courierCharges = distance * 20
+        const averageSpeed = 80; // km/hour
+    
+        const timeInMinutes = (distance / averageSpeed )*60;
+    
+        const totalMoney = courierCharges + item.overallCost
+    
+         //Accepting an order
+         const handleUpdate = async (id) => {
+            setCurrentLocation({latitude, longitude})
+            await dbc.collection('DotDotOrders').doc(id).update({
+              status: "Pending Delivery",
+              agentId: auth.currentUser.uid,
+              agentLatitude: latitude,
+              agentLongitude: longitude,
+              totalMoney,
+              timeInMinutes,
+              courierCharges,
+              distance,
+              agentcategory,
+              agentfirstname,
+              agentlastname,
+              agentvehiclemodel,
+              agentvehicleregno
+              });
+              setDistance(distance);
+              setTimeInMinutes(timeInMinutes);
+              setCourierCharges(courierCharges);
+              setTotalMoney(totalMoney);
+              setIsAccepted(id);
+              getNewOrders();
+              getPendingOrders();
+            };
+    
 
+            return (
         <View style={styles.gigs}>
 
         <Card style={styles.prodCard}>
@@ -703,8 +849,11 @@ const getDeliveryOrders =async () => {
            
 
             <View style={styles.orderDetails}>
-              
-              
+            
+            <FlatList
+            data={item.products}
+            keyExtractor={(product, index) => index.toString()}
+            renderItem={({ item }) => (
 
                 <Card style={styles.additionsView}>
                     
@@ -712,7 +861,7 @@ const getDeliveryOrders =async () => {
                 <View style={styles.descriptionView}>   
                             <View style={styles.cartprodImage}>
                             <Image
-                              //  source={{ uri: imgUrl }}
+                               source={{ uri: item.image }}
                                 style={styles.bannerimage}
                             // resizeMode="cover" 
                             />
@@ -721,8 +870,8 @@ const getDeliveryOrders =async () => {
 
                             <View style={styles.textView}>
 
-                            <Text allowFontScaling={false} style={fonts.blackBoldBig}> dotDot</Text>
-                            <Text allowFontScaling={false} style={fonts.blackBoldBig}>KES 500</Text>
+                            <Text allowFontScaling={false} style={fonts.blackBoldBig}> {item.name}</Text>
+                            <Text allowFontScaling={false} style={fonts.blackBoldBig}>KES {item.price}</Text>
 
                             </View>
 
@@ -735,7 +884,7 @@ const getDeliveryOrders =async () => {
 
                                 <View style={styles.textView2}>
                                
-                                    <Text allowFontScaling={false} style={fonts.blackBoldSmall}>xyxyxyxyxyxyx</Text>
+                                    <Text allowFontScaling={false} style={fonts.blackBoldSmall}>{item.description}</Text>
                                 </View>
 
                                 <View style={styles.textView2}>
@@ -766,7 +915,7 @@ const getDeliveryOrders =async () => {
 
                                 <View style={styles.textView2}>
                                    
-                                <Text allowFontScaling={false} style={fonts.blackBoldBig}>5 </Text>
+                                <Text allowFontScaling={false} style={fonts.blackBoldBig}>{item.quantity} </Text>
 
                                </View>
 
@@ -783,28 +932,33 @@ const getDeliveryOrders =async () => {
                     
 
                 </Card>
-
+                  )}
+                  />
                 <View style={styles.textView}>
                     <View style={styles.textView2}>
                         <MaterialIcons name="motorcycle" size={24} color="grey" />
-                        <Text  style={fonts.blackBoldSmall}>Delivery {roundedDistance} Km</Text>
+                        <Text  style={fonts.blackBoldSmall}>Delivery {distance.toFixed(2)}Km</Text>
                     </View>
 
                     <View style={styles.textView2}>
                         <MaterialIcons name="timer" size={24} color="red" />
-                        <Text  style={fonts.blackBoldSmall}>{roundedDeliveryTime} minutes</Text>
+                        <Text  style={fonts.blackBoldSmall}>{timeInMinutes.toFixed(0)}  minutes</Text>
                     </View>
                 </View>
 
 
                 <View style={styles.textView}>
-                    <TouchableOpacity>
+                {!targetLocation ? (
+                    <TouchableOpacity  onPress={handleGetDirection}>
                     <View style={styles.textView2}>
                         <MaterialIcons name="location-pin" size={24} color="black" />
-                        <Text style={fonts.greyLightBig}>{item.address} (View map)</Text>
+                        <Text style={fonts.greyLightBig}> (View map)</Text>
                     </View>
 
                     </TouchableOpacity>
+                     ) : (
+                    <MapPage currentLocation={currentLocation} targetLocation={targetLocation} />
+                    )}
                    
                 </View>
 
@@ -821,11 +975,11 @@ const getDeliveryOrders =async () => {
                         
 
                         <View style={styles.nameDetail}>
-                            <Text  style={fonts.blackBoldSmall}>John Doe</Text>
+                            <Text  style={fonts.blackBoldSmall}>{item.userDisplayName}</Text>
 
                             <TouchableOpacity>
                             <Card style={styles.callButton}>
-                                <Text style={fonts.whiteBoldSmall}>+254722xxxxx4</Text>
+                                <Text style={fonts.whiteBoldSmall}>{item.userPhoneNumber}</Text>
                             </Card>
                             </TouchableOpacity>
                         </View>
@@ -845,31 +999,41 @@ const getDeliveryOrders =async () => {
                 <View style={styles.textView}>
 
                     <Text  style={fonts.greeBoldSmall}>Total</Text>
-                    <Text style={fonts.greenBoldBig}>KES {totalAmount}</Text>
+                    <Text style={fonts.greenBoldBig}>KES {totalMoney.toFixed(2)} </Text>
                 </View>
 
 
 
                 <View style={styles.buttonView}>
         
-                    <Card style={styles.declineButton}>
-                    <TouchableOpacity onPress={handleButtonPress} >
-                        <Text style={styles.text2b}>
-                           Close Order
-                        </Text>
-                        </TouchableOpacity>
-                    </Card>
-                    <Modal visible={isModalVisible} onRequestClose={handleModalClose}>
-                        <View>
-                        <TextInput
-                            value={mpesaCode}
-                            onChangeText={handleTextInputChange}
-                            placeholder="Enter Mpesa Code"
-                        />
-                        <Button title="Save" onPress={() => closeOrder(item.id)} />
-                        </View>
-                    </Modal>
-                    
+                {isAccepted && isAccepted === item.id ? 
+        
+                
+        <Card style={styles.declineButton}>
+        <TouchableOpacity onPress={() => closeOrder(item.id)}>
+            <Text allowFontScaling={false} style={styles.text2b}>
+                {closeOrder ? "Close Order" : "Wait for confirmation"}
+            </Text>
+            </TouchableOpacity>
+        </Card>
+        : 
+        <>
+        <Card style={styles.declineButton}>
+            <Text allowFontScaling={false} style={styles.text2b}>
+                Decline
+            </Text>
+        </Card>
+
+        <Card style={styles.acceptButton}>
+           
+            <TouchableOpacity onPress={() => handleUpdate(item.id)}>
+                <Text allowFontScaling={false} style={styles.text2c}>
+                    Accept Request
+                </Text>
+            </TouchableOpacity>
+        </Card> 
+        </> }
+
                     
                     
                     
@@ -894,7 +1058,7 @@ const getDeliveryOrders =async () => {
 
     </View>
 
-    );
+        )};
 
 
 

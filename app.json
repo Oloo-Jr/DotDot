@@ -28,7 +28,7 @@
         }
       },
       "package": "com.whim.DotDot",
-      "versionCode": 9,
+      "versionCode": 22,
       "permissions": ["ACCESS_FINE_LOCATION", "ACCESS_COARSE_LOCATION"]
     },
     "web": {

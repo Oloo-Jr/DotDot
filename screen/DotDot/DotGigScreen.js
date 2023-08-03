@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { View, StyleSheet, Text, TouchableOpacity, FlatList, TextInput, ImageBackground, Image,Modal,Button } from 'react-native';
+import { View, StyleSheet, Text, TouchableOpacity, FlatList, TextInput, ImageBackground, Linking , Image,Modal,Button } from 'react-native';
 import Card from '../../components/card';
 import { Dimensions } from 'react-native';
 import TitleText from '../../components/TitleText';
@@ -119,6 +119,20 @@ const DotGigScreen = ({ navigation }) => {
         setAgentVehicleModel(vehicleModel);
 
     }
+
+    
+        const handleCallPress = ({userPhoneNumber}) => {
+          const phoneUrl = `tel:${userPhoneNumber}`;
+          Linking.canOpenURL(phoneUrl)
+            .then((supported) => {
+              if (supported) {
+                return Linking.openURL(phoneUrl);
+              } else {
+                console.log(`Phone number: ${userPhoneNumber} is not supported.`);
+              }
+            })
+            .catch((error) => console.error('Error opening phone app:', error));
+        };
 
     const handleButtonPress = () => {
         setIsModalVisible(true);
@@ -511,7 +525,7 @@ const getDeliveryOrders =async () => {
                         <View style={styles.nameDetail}>
                             <Text  style={fonts.blackBoldSmall}>{item.userDisplayName}</Text>
 
-                            <TouchableOpacity>
+                            <TouchableOpacity onPress={() => handleCallPress(item.userPhoneNumber)}>
                             <Card style={styles.callButton}>
                                 <Text style={fonts.whiteBoldSmall}>{item.userPhoneNumber}</Text>
                             </Card>
@@ -621,7 +635,6 @@ const getDeliveryOrders =async () => {
 
                 <Card style={styles.additionsView}>
                     
-                
                 <View style={styles.descriptionView}>   
                             <View style={styles.cartprodImage}>
                             <Image
@@ -738,7 +751,7 @@ const getDeliveryOrders =async () => {
                         <View style={styles.nameDetail}>
                             <Text  style={fonts.blackBoldSmall}>{item.userDisplayName}</Text>
 
-                            <TouchableOpacity>
+                            <TouchableOpacity onPress={() => handleCallPress(item.userPhoneNumber)}>
                             <Card style={styles.callButton}>
                                 <Text style={fonts.whiteBoldSmall}>{item.userPhoneNumber}</Text>
                             </Card>
@@ -815,7 +828,6 @@ const getDeliveryOrders =async () => {
     
          //Accepting an order
          const handleUpdate = async (id) => {
-            setCurrentLocation({latitude, longitude})
             await dbc.collection('DotDotOrders').doc(id).update({
               status: "Pending Delivery",
               agentId: auth.currentUser.uid,
@@ -977,7 +989,7 @@ const getDeliveryOrders =async () => {
                         <View style={styles.nameDetail}>
                             <Text  style={fonts.blackBoldSmall}>{item.userDisplayName}</Text>
 
-                            <TouchableOpacity>
+                            <TouchableOpacity onPress={() => handleCallPress(item.userPhoneNumber)}>
                             <Card style={styles.callButton}>
                                 <Text style={fonts.whiteBoldSmall}>{item.userPhoneNumber}</Text>
                             </Card>

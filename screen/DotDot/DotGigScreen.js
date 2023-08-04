@@ -77,6 +77,7 @@ const DotGigScreen = ({ navigation }) => {
           },
         });
       };
+    
  
     const handleArrived = () => {
         // Handle the logic for when the "Arrived" button is pressed
@@ -399,92 +400,96 @@ const getDeliveryOrders =async () => {
 
             <View style={styles.orderDetails}>
               
-              
+            {item.products.map((product) => (
+
+<Card style={styles.additionsView}>
+                    
+                
+<View style={styles.descriptionView}>   
+            <View style={styles.cartprodImage}>
+            <Image
+              source={{ uri: product.image }}
+                style={styles.bannerimage}
+            // resizeMode="cover" 
+            />
+        </View>
+<View style={styles.description}>
+
+            <View style={styles.textView}>
+
+            <Text allowFontScaling={false} style={fonts.blackBoldBig}> {product.name}</Text>
+            <Text allowFontScaling={false} style={fonts.blackBoldBig}>KES {product.price}</Text>
+
+            </View>
+
+           
+            
+            <View style={styles.textView}>
+
+
+
+
+                <View style={styles.textView2}>
+               
+                    <Text allowFontScaling={false} style={fonts.blackBoldSmall}>{product.description}</Text>
+                </View>
+
+                <View style={styles.textView2}>
+
+                    {/* <Text  style={styles.text42}>Quantity</Text>*/}
+                </View>
+
+                
+                
+
+            </View>
+           
+
+
+          
+            <View style={styles.textView}>
+
+
+                <View style={styles.textView2}>
+                   
+                    <Text allowFontScaling={false} style={fonts.blackBoldSmall}>Quantity</Text>
+
+                </View>
+
+                
+
+               
+
+                <View style={styles.textView2}>
+                   
+                <Text allowFontScaling={false} style={fonts.blackBoldBig}>{product.quantity} </Text>
+
+               </View>
+
+                
+            </View>
+            </View>
+            </View>
+
+
+
+
+
+            
+    
+
+</Card>
+      ))}
+           {/*   
             <FlatList
             data={item.products}
             keyExtractor={(product, index) => index.toString()}
             renderItem={({ item }) => (
 
-                <Card style={styles.additionsView}>
-                    
                 
-                <View style={styles.descriptionView}>   
-                            <View style={styles.cartprodImage}>
-                            <Image
-                              source={{ uri: item.image }}
-                                style={styles.bannerimage}
-                            // resizeMode="cover" 
-                            />
-                        </View>
-<View style={styles.description}>
-
-                            <View style={styles.textView}>
-
-                            <Text allowFontScaling={false} style={fonts.blackBoldBig}> {item.name}</Text>
-                            <Text allowFontScaling={false} style={fonts.blackBoldBig}>KES {item.price}</Text>
-
-                            </View>
-
-                           
-                            
-                            <View style={styles.textView}>
-
-
-     
-
-                                <View style={styles.textView2}>
-                               
-                                    <Text allowFontScaling={false} style={fonts.blackBoldSmall}>{item.description}</Text>
-                                </View>
-
-                                <View style={styles.textView2}>
-
-                                    {/* <Text  style={styles.text42}>Quantity</Text>*/}
-                                </View>
-
-                                
-                                
-
-                            </View>
-                           
-
-
-                          
-                            <View style={styles.textView}>
-
-
-                                <View style={styles.textView2}>
-                                   
-                                    <Text allowFontScaling={false} style={fonts.blackBoldSmall}>Quantity</Text>
-
-                                </View>
-
-                                
-
-                               
-
-                                <View style={styles.textView2}>
-                                   
-                                <Text allowFontScaling={false} style={fonts.blackBoldBig}>{item.quantity} </Text>
-
-                               </View>
-
-                                
-                            </View>
-                            </View>
-                            </View>
-
-
-
-
-
-                            
-                    
-
-                </Card>
                   )}
                   />
-
+            */}
                 <View style={styles.textView}>
                     <View style={styles.textView2}>
                         <MaterialIcons name="motorcycle" size={24} color="grey" />
@@ -628,89 +633,86 @@ const getDeliveryOrders =async () => {
               
               
 
-            <FlatList
-            data={item.products}
-            keyExtractor={(product, index) => index.toString()}
-            renderItem={({ item }) => (
+            {item.products.map((product) => (
 
-                <Card style={styles.additionsView}>
+<Card style={styles.additionsView}>
                     
-                <View style={styles.descriptionView}>   
-                            <View style={styles.cartprodImage}>
-                            <Image
-                                source={{ uri: item.image }}
-                                style={styles.bannerimage}
-                            // resizeMode="cover" 
-                            />
-                        </View>
+                
+<View style={styles.descriptionView}>   
+            <View style={styles.cartprodImage}>
+            <Image
+              source={{ uri: product.image }}
+                style={styles.bannerimage}
+            // resizeMode="cover" 
+            />
+        </View>
 <View style={styles.description}>
 
-                            <View style={styles.textView}>
+            <View style={styles.textView}>
 
-                            <Text allowFontScaling={false} style={fonts.blackBoldBig}> {item.name}</Text>
-                            <Text allowFontScaling={false} style={fonts.blackBoldBig}>KES {item.price}</Text>
+            <Text allowFontScaling={false} style={fonts.blackBoldBig}> {product.name}</Text>
+            <Text allowFontScaling={false} style={fonts.blackBoldBig}>KES {product.price}</Text>
 
-                            </View>
+            </View>
 
-                           
-                            
-                            <View style={styles.textView}>
-
-
-     
-
-                                <View style={styles.textView2}>
-                               
-                                    <Text allowFontScaling={false} style={fonts.blackBoldSmall}>{item.description}</Text>
-                                </View>
-
-                                <View style={styles.textView2}>
-
-                                    {/* <Text  style={styles.text42}>Quantity</Text>*/}
-                                </View>
-
-                                
-                                
-
-                            </View>
-                           
-
-
-                          
-                            <View style={styles.textView}>
-
-
-                                <View style={styles.textView2}>
-                                   
-                                    <Text allowFontScaling={false} style={fonts.blackBoldSmall}>Quantity</Text>
-
-                                </View>
-
-                                
-
-                               
-
-                                <View style={styles.textView2}>
-                                   
-                                <Text allowFontScaling={false} style={fonts.blackBoldBig}>{item.quantity} </Text>
-
-                               </View>
-
-                                
-                            </View>
-                            </View>
-                            </View>
+           
+            
+            <View style={styles.textView}>
 
 
 
 
+                <View style={styles.textView2}>
+               
+                    <Text allowFontScaling={false} style={fonts.blackBoldSmall}>{product.description}</Text>
+                </View>
 
-                            
-                    
+                <View style={styles.textView2}>
 
-                </Card>
-                  )}
-                  />
+                    {/* <Text  style={styles.text42}>Quantity</Text>*/}
+                </View>
+
+                
+                
+
+            </View>
+           
+
+
+          
+            <View style={styles.textView}>
+
+
+                <View style={styles.textView2}>
+                   
+                    <Text allowFontScaling={false} style={fonts.blackBoldSmall}>Quantity</Text>
+
+                </View>
+
+                
+
+               
+
+                <View style={styles.textView2}>
+                   
+                <Text allowFontScaling={false} style={fonts.blackBoldBig}>{product.quantity} </Text>
+
+               </View>
+
+                
+            </View>
+            </View>
+            </View>
+
+
+
+
+
+            
+    
+
+</Card>
+      ))}
 
                 <View style={styles.textView}>
                     <View style={styles.textView2}>
@@ -862,90 +864,86 @@ const getDeliveryOrders =async () => {
 
             <View style={styles.orderDetails}>
             
-            <FlatList
-            data={item.products}
-            keyExtractor={(product, index) => index.toString()}
-            renderItem={({ item }) => (
+            {item.products.map((product) => (
 
-                <Card style={styles.additionsView}>
+<Card style={styles.additionsView}>
                     
                 
-                <View style={styles.descriptionView}>   
-                            <View style={styles.cartprodImage}>
-                            <Image
-                               source={{ uri: item.image }}
-                                style={styles.bannerimage}
-                            // resizeMode="cover" 
-                            />
-                        </View>
+<View style={styles.descriptionView}>   
+            <View style={styles.cartprodImage}>
+            <Image
+              source={{ uri: product.image }}
+                style={styles.bannerimage}
+            // resizeMode="cover" 
+            />
+        </View>
 <View style={styles.description}>
 
-                            <View style={styles.textView}>
+            <View style={styles.textView}>
 
-                            <Text allowFontScaling={false} style={fonts.blackBoldBig}> {item.name}</Text>
-                            <Text allowFontScaling={false} style={fonts.blackBoldBig}>KES {item.price}</Text>
+            <Text allowFontScaling={false} style={fonts.blackBoldBig}> {product.name}</Text>
+            <Text allowFontScaling={false} style={fonts.blackBoldBig}>KES {product.price}</Text>
 
-                            </View>
+            </View>
 
-                           
-                            
-                            <View style={styles.textView}>
-
-
-     
-
-                                <View style={styles.textView2}>
-                               
-                                    <Text allowFontScaling={false} style={fonts.blackBoldSmall}>{item.description}</Text>
-                                </View>
-
-                                <View style={styles.textView2}>
-
-                                    {/* <Text  style={styles.text42}>Quantity</Text>*/}
-                                </View>
-
-                                
-                                
-
-                            </View>
-                           
-
-
-                          
-                            <View style={styles.textView}>
-
-
-                                <View style={styles.textView2}>
-                                   
-                                    <Text allowFontScaling={false} style={fonts.blackBoldSmall}>Quantity</Text>
-
-                                </View>
-
-                                
-
-                               
-
-                                <View style={styles.textView2}>
-                                   
-                                <Text allowFontScaling={false} style={fonts.blackBoldBig}>{item.quantity} </Text>
-
-                               </View>
-
-                                
-                            </View>
-                            </View>
-                            </View>
+           
+            
+            <View style={styles.textView}>
 
 
 
 
+                <View style={styles.textView2}>
+               
+                    <Text allowFontScaling={false} style={fonts.blackBoldSmall}>{product.description}</Text>
+                </View>
 
-                            
-                    
+                <View style={styles.textView2}>
 
-                </Card>
-                  )}
-                  />
+                    {/* <Text  style={styles.text42}>Quantity</Text>*/}
+                </View>
+
+                
+                
+
+            </View>
+           
+
+
+          
+            <View style={styles.textView}>
+
+
+                <View style={styles.textView2}>
+                   
+                    <Text allowFontScaling={false} style={fonts.blackBoldSmall}>Quantity</Text>
+
+                </View>
+
+                
+
+               
+
+                <View style={styles.textView2}>
+                   
+                <Text allowFontScaling={false} style={fonts.blackBoldBig}>{product.quantity} </Text>
+
+               </View>
+
+                
+            </View>
+            </View>
+            </View>
+
+
+
+
+
+            
+    
+
+</Card>
+      ))}
                 <View style={styles.textView}>
                     <View style={styles.textView2}>
                         <MaterialIcons name="motorcycle" size={24} color="grey" />

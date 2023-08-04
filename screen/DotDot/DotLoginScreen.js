@@ -1,5 +1,5 @@
 import React,{useState, useEffect} from 'react';
-import { View, StyleSheet, Image, TouchableOpacity, ImageBackground, TextInput, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard } from 'react-native';
+import { View, StyleSheet, Image, TouchableOpacity, ImageBackground, ActivityIndicator, TextInput, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard } from 'react-native';
 import Card from '../../components/card';
 import { Dimensions } from 'react-native';
 import { SelectList } from 'react-native-dropdown-select-list'
@@ -13,6 +13,7 @@ import { auth } from '../../Database/config';
 const DotLoginScreen = ({ navigation }) => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState('')
+  
 
     const handleLogin = () => {
         auth
@@ -39,7 +40,7 @@ const DotLoginScreen = ({ navigation }) => {
 
 <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View style={styles.container}>
-
+        <ActivityIndicator size="large" />
 
         <ImageBackground
                 source={require('../../assets/4k-background.png')}
@@ -130,7 +131,6 @@ const DotLoginScreen = ({ navigation }) => {
 
             </View>
             </ImageBackground>
-            
         </View>
         </TouchableWithoutFeedback>
 

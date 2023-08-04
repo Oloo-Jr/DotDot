@@ -15,7 +15,11 @@ export function HomeStack() {
     return (
         <Home.Navigator>
 
-
+<Home.Screen
+                name="DotLoginScreen"
+                component={DotLoginScreen}
+                options={{ headerShown: false }}
+            />
 
 <Home.Screen
                 name="DotHomeScreen"

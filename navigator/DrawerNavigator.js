@@ -8,6 +8,8 @@ import { colors } from '../global/styles'
 const Drawer = createDrawerNavigator()
 
 export default function DrawerNavigator(){
+
+    
     return(
         <Drawer.Navigator  useLegacyImplementation={true}>
             <Drawer.Screen

@@ -1020,78 +1020,7 @@ const styles = StyleSheet.create({
     },
 
 
-    ////////////TEXT STYLES///////////////////
-    text1: {
-        fontFamily: 'Lexend-light',
-        fontSize: 25,
-        color: 'black',
-        fontWeight: 'bold'
-    },
-
-    text2: {
-        fontFamily: 'Lexend-bold',
-        fontSize: 15,
-        color: 'black',
-        fontWeight: 'bold'
-    },
-
-    text2b: {
-        fontFamily: 'Lexend-bold',
-        fontSize: 15,
-        color: 'red',
-        fontWeight: 'bold'
-    },
-
-    text2c: {
-        fontFamily: 'Lexend-bold',
-        fontSize: 15,
-        color: 'white',
-        fontWeight: 'bold'
-    },
-
-    text2d: {
-        fontFamily: 'Lexend-bold',
-        fontSize: 15,
-        color: '#8CC740',
-        fontWeight: 'bold'
-    },
-
-    text2e: {
-        fontFamily: 'Lexend-bold',
-        fontSize: 19,
-        color: '#8CC740',
-        fontWeight: 'bold'
-    },
-
-    text3: {
-        fontFamily: 'Lexend-light',
-        fontSize: 15,
-        color: 'black',
-        fontWeight: 'bold'
-    },
-
-    text4: {
-        fontFamily: 'Lexend-bold',
-        fontSize: 12,
-        color: 'black',
-        fontWeight: 'bold'
-    },
-
-    text5: {
-        fontFamily: 'Lexend-light',
-        fontSize: 15,
-        color: 'grey',
-        fontWeight: 'bold'
-    },
-
-    text6: {
-        fontFamily: 'Lexend-light',
-        fontSize: 13,
-        color: 'white',
-        fontWeight: 'bold'
-    },
-
-    ////////////TEXT STYLES///////////////////
+  
 
     gigs: {
         padding: 10,
@@ -1285,27 +1214,7 @@ const styles = StyleSheet.create({
                //   flexDirection: 'row'
               },
 
-              text12: {
-                fontFamily: 'Lexend-light',
-                fontSize: 15,
-                color: 'black',
-                fontWeight: 'bold'
-            },
-
-            text42: {
-                fontFamily: 'Lexend-light',
-                fontSize: 11,
-                color: 'black',
-                fontWeight: 'bold'
-            },
-        
-            text421: {
-                fontFamily: 'Lexend-light',
-                fontSize: 11,
-                color: 'grey',
-                fontWeight: 'bold'
-            },
-
+            
 
 
 

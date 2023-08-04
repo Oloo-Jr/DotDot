@@ -28,8 +28,11 @@
         }
       },
       "package": "com.whim.DotDot",
-      "versionCode": 9,
-      "permissions": ["ACCESS_FINE_LOCATION", "ACCESS_COARSE_LOCATION"]
+      "versionCode": 25,
+      "permissions": [
+        "ACCESS_FINE_LOCATION",
+        "ACCESS_COARSE_LOCATION"
+      ]
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -38,6 +41,13 @@
       "eas": {
         "projectId": "2364eef7-2a47-44a1-8e6d-c1a772b65151"
       }
+    },
+    "runtimeVersion": {
+      "policy": "sdkVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/2364eef7-2a47-44a1-8e6d-c1a772b65151",
+      "enabled": true
     }
   }
 }
